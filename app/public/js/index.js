@@ -21,11 +21,6 @@ firebase.auth().onAuthStateChanged(function (user) {
   }
 });
 
-
-$.get('/esp-info')
-  .then(data => console.log(data));
-
-
 // Criação dos Card
 
 var criar_card_ouvinte = firebase.database().ref('/users/tiago_1234');

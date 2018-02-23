@@ -1,18 +1,30 @@
-let nome_coisa = window.location.hash.replace('#', '')
+$(document).ready(function () {
+    //   Hide the border by commenting out the variable below
+    var $on = 'section';
+    $($on).css({
+        'background': 'none',
+        'border': 'none',
+        'box-shadow': 'none'
+    });
 
-const socket = io('/tiago_1234');
+});
+
+const nome_coisa = window.location.hash.replace('#', ''),
+socket = io('/tiago_1234');
 
 var room = nome_coisa;
 
-var data_client = {
+let data_client = {
     auth_user: 'tiago_1234',
     auth_thing: nome_coisa,
-    payload: [],
+    payload: {
+        events: {}
+    },
     sender: 'client'
-}
+}, keyboard_buttons = [];
 
 socket.on('connect', function () {
-    console.log('try connect');
+    //console.log('try connect');
     socket.emit('room', room);
 });
 
@@ -34,32 +46,78 @@ socket.on('msg on', function (msg) {
     $('#demo').text("thing msg: " + msg);
 });
 
-
-$(() => {
-    $('form').submit(function () {
-        data_client['payload'] = {
-            msg_on_client: $('#m').val()
-        }
-        socket.emit('msg on', data_client);
-        $('#demo').val('');
-        return false;
-    });
-    // evento "nome da coisa"
-});
-
-criarTeclado = (id_key, buttonLabel) => {
+criarTeclado = (label, state, pin) => {
     return (`  
-        <button id = ${id_key} name = 'changPinState' >
-            ${buttonLabel}
+        <button id="${label}" state="${ state }" pin="${ pin }" class="mdl-button mdl-js-button mdl-button--raised">
+            ${label}
         </button>
     `);
+};
+
+addButtonPin = () => {
+    const dataForm = {
+        label: $('#button_label').val(),
+        pin: $('#button_pin option:selected').val(),
+        state: $('#button_state').val()
+    };
+
+    if (dataForm.label == '') {
+        snackbarContainer.MaterialSnackbar.showSnackbar({
+            message: 'Insira um nome para do botão'
+        });
+        return;
+    }else if (dataForm.state == '') {
+        snackbarContainer.MaterialSnackbar.showSnackbar({
+            message: 'Insira o estado do botão'
+        });
+        return;
+    }else if (dataForm.pin == '') {
+        snackbarContainer.MaterialSnackbar.showSnackbar({
+            message: 'Insira o pino do botão'
+        });
+        return;
+    }
+    
+    keyboard_buttons.push({
+        name: dataForm.label,
+        pin: dataForm.pin,
+        state: dataForm.state
+    });
+
+    $("#keyboard_buttons").append( criarTeclado(dataForm.label, dataForm.state, dataForm.pin) );
+
+    $(`#${ dataForm.label }`).click( _ => {
+        
+        console.log(`Clicou`);
+
+    });
+
+    // Limpar campos 
+    $('#div_button_label').get(0).MaterialTextfield.change('');
+    $('#div_button_state').get(0).MaterialTextfield.change('');
+    $('#button_pin').val('');  
+};
+
+keyboard_save = () => {
+    
+   data_client.payload.events = {
+        pin_on: keyboard_buttons
+    };  
+
+    console.log(data_client.payload.events);
+
+    //socket.emit('dashboard', data_client);
+};
+
+visu_form_hide = () => {
+    $('#div_form').hide();
 };
 
 status = () => {
     socket.emit('load page', data_client);
 }
 
-set_pin = () => {
+/* set_pin = () => {
     data_client['payload'] = {
         pin_on_client: [{
             pin: '4',
@@ -71,35 +129,17 @@ set_pin = () => {
     }
     console.log(data_client)
     socket.emit('set pins', data_client);
-}
-var bl = 0;
-addButtonPin = () => {
-    bl = bl + 1
-    $("#demo_3").append(criarTeclado(bl, bl));
-    let $btn = $("#demo_3").find("#" + bl + " button[name='changPinState']");
+} */
 
-    $btn.click(function () {
-        console.log('teste click');
-    });
-
-    $(`#${ bl }`).click( () => {
-        console.log(`Clicou em ${ bl }`);
-
-        data_client.payload.push({
-            pin: bl,
-            state: 0
-        });
-        
-        console.log(data_client.payload);
-    });
-    
-};
 
 // initial time for plot chart
 var valor_chart = [
     [0, 0]
-]; // incial time for plot chart 
+];
+
+// incial time for plot chart 
 var start = Date.now() / 1000 | 0;
+
 // coisas pro charts
 google.charts.load('current', {
     packages: ['corechart', 'line']
@@ -139,14 +179,3 @@ start_grafic = () => {
         }
     });
 }
-
-
-$(document).ready(function () {
-    //   Hide the border by commenting out the variable below
-    var $on = 'section';
-    $($on).css({
-        'background': 'none',
-        'border': 'none',
-        'box-shadow': 'none'
-    });
-});

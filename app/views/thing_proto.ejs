@@ -1,11 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="pt-br">
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-route.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="css/card.css">
+
+    <script src="js/jquery.min.js"></script>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-indigo.min.css">
@@ -14,32 +15,37 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="thing_proto.js"></script>
 
-    <title>thing</title>
+    <script src="js/thing_proto.js"></script>
+
+    <title>Thing Dashboard</title>
 </head>
 
 <body>
     
     <div class="mdl-layout mdl-js-layout ">
             <div class="mdl-grid">
-            <!--card 1-->
+            <!--card CHAT-->
                 <div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title">
                         <h2 class="mdl-card__title-text">Chat</h2>
                     </div>
                     <div class="mdl-card__supporting-text">
+
                         <p id="demo"></p>
                         <ul id="messages"></ul>
+
                         <form action="">
-                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+
+                            <div id="div_chat_msg" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                 <input id="m" autocomplete="off" class="mdl-textfield__input" type="text">
-                                <label class="mdl-textfield__label" for="sample4">type a msg </label>
+                                <label class="mdl-textfield__label" for="sample4">Digite a mensagem</label>
                             </div>
                             <button class="mdl-button mdl-js-button mdl-button--raised">
                                 <i class="material-icons">trending_flat</i>
                             </button>
                         </form>
+
                     </div>
                     <div class="mdl-card__actions mdl-card--border">
                         <div id="teclado">
@@ -57,30 +63,62 @@
                         </button>
                     </div>
                 </div>    
+
             <!--card keyboard-->
                 <div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet demo-card-wide mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title">
                         <h2 class="mdl-card__title-text">keyboard</h2>
                     </div>
+
                     <div class="mdl-card__supporting-text">
-                        <p id="demo_3" ></p>
+
+                        <!-- Keyboard Buttons -->
+                        <div id="keyboard_buttons"></div>
+
                         <ul id="messages_3"></ul>
-                        <form action="">
-                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input id="m_3" autocomplete="off" class="mdl-textfield__input" type="text">
-                                <label class="mdl-textfield__label" for="sample4">type a msg 3</label>
-                            </div>
-                            <button onclick="addButtonPin()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
-                                <i class="material-icons">add</i>
-                            </button>
-                        </form>
+
+                        <div id="div_form" class="flex">                         
+
+                            <form action="">
+                                <!-- Button Label -->
+                                <div id="div_button_label" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="button_label" autocomplete="off" class="mdl-textfield__input" type="text">
+                                    <label class="mdl-textfield__label" for="button_label">Button label</label>
+                                </div>
+
+                                <!-- Button State -->
+                                <div id="div_button_state" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" pattern="-?[0-1]*(\.[0-1]+)?" id="button_state">
+                                    <label class="mdl-textfield__label" for="button_state">State</label>
+                                    <span class="mdl-textfield__error">Estado tem que ser 0 ou 1</span>
+                                </div>
+
+                                <button onclick="visu_form_hide()" id="visu_form" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                                    <i class="material-icons">visibility</i>
+                                </button> 
+
+                                <!-- Pins Dropdown -->
+                                <select id="button_pin">
+                                    <option value="">Selecione o pino</option>    
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+
+                                <button onclick="addButtonPin()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                                    <i class="material-icons">add</i>
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
                     <div class="mdl-card__actions mdl-card--border">
-                        <div id="teclado">
-                            <button class="mdl-button mdl-js-button mdl-button--raised">
-                                <i class="material-icons"> save</i>
-                            </button>
-                        </div>
+                       
+                        <button onclick="keyboard_save()" class="mdl-button mdl-js-button mdl-button--raised">
+                            <i class="material-icons">save</i>
+                        </button>
+                     
                     </div>
                     <div class="mdl-card__menu">
                         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
@@ -89,7 +127,7 @@
                     </div>
                 </div>
                 
-            <!--card 3-->
+            <!--card Graph-->
                 <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-phone demo-card-wide mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title">
                         <h2 class="mdl-card__title-text">grafico</h2>
@@ -115,26 +153,37 @@
                            
             </div>      
         
-        <main class="mdl-layout__content">
-            <footer class="mdl-mini-footer">
-                <div class="mdl-mini-footer__left-section">
-                    <div class="mdl-logo">Copyright Information</div>
-                    <ul class=mdl-mini-footer__link-list"">
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">Privacy terms</a></li>
-                        <li><a href="#">User Agreement</a></li>
-                    </ul>
-                </div>
-                <div class="mdl-mini-footer__right-section">
-                    <button class="mdl-mini-footer__social-btn">1</button>
-                    <button class="mdl-mini-footer__social-btn">2</button>
-                    <button class="mdl-mini-footer__social-btn">3</button>
-                </div>
-            </footer>
-        </main>
+        <!--   
+            <main class="mdl-layout__content">
+                <footer class="mdl-mini-footer">
+                    <div class="mdl-mini-footer__left-section">
+                        <div class="mdl-logo">Copyright Information</div>
+                        <ul class=mdl-mini-footer__link-list"">
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Privacy terms</a></li>
+                            <li><a href="#">User Agreement</a></li>
+                        </ul>
+                    </div>
+                    <div class="mdl-mini-footer__right-section">
+                        <button class="mdl-mini-footer__social-btn">1</button>
+                        <button class="mdl-mini-footer__social-btn">2</button>
+                        <button class="mdl-mini-footer__social-btn">3</button>
+                    </div>
+                </footer>
+            </main>
+        -->
     </div>
-    
-    
-    <script src=" https://code.jquery.com/jquery-3.1.0.js "></script>
+
+    <!-- Snackbar -->
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
 </body>
+<script>
+
+    const snackbarContainer = document.querySelector('#snackbar');
+    
+</script>
+</html>
 
