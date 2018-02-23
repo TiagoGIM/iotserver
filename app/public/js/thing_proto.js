@@ -1,3 +1,6 @@
+const nome_coisa = window.location.hash.replace('#', ''),
+socket = io('/tiago_1234');
+
 $(document).ready(function () {
     //   Hide the border by commenting out the variable below
     var $on = 'section';
@@ -9,8 +12,6 @@ $(document).ready(function () {
 
 });
 
-const nome_coisa = window.location.hash.replace('#', ''),
-socket = io('/tiago_1234');
 
 var room = nome_coisa;
 
@@ -53,6 +54,21 @@ criarTeclado = (label, state, pin) => {
         </button>
     `);
 };
+// send msg for server whit event "msg_on"
+$(() => {
+    $('#chat_form').submit(function () {
+        data_client['payload'] = {
+            msg_on_client: $('#m').val()
+        }
+        socket.emit('msg on', data_client);
+        $('#m').val('');
+    });
+});
+
+
+
+
+
 
 addButtonPin = () => {
     const dataForm = {
