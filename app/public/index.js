@@ -42,7 +42,7 @@ criar_card_ouvinte.on("child_added", function (esp, prevChildKey) {
   var $btn_2 = $("#container").find("#" + esp.key + " button[name='desligarDados']");
 
   $btn_1.click(function () {
-    window.location = "http://192.168.43.224:3000/thing#" + esp.key;
+    window.location = "http://localhost:3000/thing#" + esp.key;
 
   });
 
