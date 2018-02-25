@@ -1,17 +1,35 @@
 #div_button_label {
-    width: 200px;
+    width: 250px;
 }
 
-#div_button_state {
-    width: 80px;
+#button_state {
+    margin-left: 20px;
+    width: 100px;
 }
 
 #button_pin {
-    margin-right: 50px;
+    margin-right: 100px;
+    width: 200px;
 }
 
 #visu_form {
     float: right;
+}
+
+#div_chat_msg{
+    margin-right: 30px;
+}
+
+#chat_card {
+    width: 530px;
+}
+
+#keyboard_card {
+    width: 530px;
+}
+
+#graph_card {
+    width: 1080px;
 }
 
 .flex {
@@ -19,20 +37,16 @@
     display: inline-flex;
 }
 
-/* Only on Chrome */
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    select {
-        width: 120;
-        height: 40px;
-        background-color: white;
-        box-shadow: 0 2px 0 white;
-        border-radius: 2px;
-        border-color: rgba(0, 0, 0, 0.3);
-        color: rgba(0, 0, 0, 0.6);
-        font-family: Ubuntu;
-        font-size: 18px;
-        font-weight: 400;
-        line-height: 17px;
-        padding: 0 5px 0 5px;
-    }
+select {
+    height: 40px;
+    background-color: white;
+    box-shadow: 0 2px 0 white;
+    border-radius: 2px;
+    border-color: rgba(0, 0, 0, 0.3);
+    color: rgba(0, 0, 0, 0.6);
+    font-family: Ubuntu;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 17px;
+    padding: 0 5px 0 5px;
 }

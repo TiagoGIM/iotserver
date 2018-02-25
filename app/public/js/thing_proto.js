@@ -1,5 +1,16 @@
 const nome_coisa = window.location.hash.replace('#', ''),
-socket = io('/tiago_1234');
+    socket = io('/tiago_1234'),
+    room = nome_coisa;
+
+let keyboard_buttons = [],
+    data_client = {
+        auth_user: 'tiago_1234',
+        auth_thing: nome_coisa,
+        payload: {
+            events: {}
+        },
+        sender: 'client'
+    };
 
 $(document).ready(function () {
     //   Hide the border by commenting out the variable below
@@ -9,20 +20,7 @@ $(document).ready(function () {
         'border': 'none',
         'box-shadow': 'none'
     });
-
 });
-
-
-var room = nome_coisa;
-
-let data_client = {
-    auth_user: 'tiago_1234',
-    auth_thing: nome_coisa,
-    payload: {
-        events: {}
-    },
-    sender: 'client'
-}, keyboard_buttons = [];
 
 socket.on('connect', function () {
     //console.log('try connect');
@@ -44,7 +42,7 @@ socket.on('get pins', function (msg) {
 
 socket.on('msg on', function (msg) {
     console.log('payload', msg);
-    $('#demo').text("thing msg: " + msg);
+    $('#thing_msgs').text("thing msg: " + msg);
 });
 
 criarTeclado = (label, state, pin) => {
@@ -54,71 +52,56 @@ criarTeclado = (label, state, pin) => {
         </button>
     `);
 };
-// send msg for server whit event "msg_on"
-$(() => {
-    $('#chat_form').submit(function () {
-        data_client['payload'] = {
-            msg_on_client: $('#m').val()
-        }
-        socket.emit('msg on', data_client);
-        $('#m').val('');
-    });
-});
-
-
-
-
-
 
 addButtonPin = () => {
     const dataForm = {
         label: $('#button_label').val(),
         pin: $('#button_pin option:selected').val(),
-        state: $('#button_state').val()
+        state: $('#button_state option:selected').val()
     };
 
     if (dataForm.label == '') {
         snackbarContainer.MaterialSnackbar.showSnackbar({
-            message: 'Insira um nome para do botão'
+            message: 'Insira o nome do botão'
         });
         return;
-    }else if (dataForm.state == '') {
+    } else if (dataForm.state == '') {
         snackbarContainer.MaterialSnackbar.showSnackbar({
             message: 'Insira o estado do botão'
         });
         return;
-    }else if (dataForm.pin == '') {
+    } else if (dataForm.pin == '') {
         snackbarContainer.MaterialSnackbar.showSnackbar({
             message: 'Insira o pino do botão'
         });
         return;
     }
-    
+
     keyboard_buttons.push({
         name: dataForm.label,
         pin: dataForm.pin,
         state: dataForm.state
     });
 
-    $("#keyboard_buttons").append( criarTeclado(dataForm.label, dataForm.state, dataForm.pin) );
+    $("#keyboard_buttons").append(criarTeclado(dataForm.label, dataForm.state, dataForm.pin));
 
-    $(`#${ dataForm.label }`).click( _ => {
-        
+    $(`#${ dataForm.label }`).click(_ => {
+
         console.log(`Clicou`);
 
     });
 
     // Limpar campos 
     $('#div_button_label').get(0).MaterialTextfield.change('');
-    $('#div_button_state').get(0).MaterialTextfield.change('');
-    $('#button_pin').val('');  
+    $('#button_state').val('');
+    $('#button_pin').val('');
 };
 
 keyboard_save = () => {
-    
-   data_client.payload.events = {
+
+    data_client.payload.events = {
         pin_on: keyboard_buttons
-    };  
+    };
 
     console.log(data_client.payload.events);
 
@@ -127,14 +110,26 @@ keyboard_save = () => {
 
 visu_form_hide = () => {
     $('#div_form').hide();
+
+    $('#keyboard_support_txt').append(`
+        <button onclick="visu_form_show()" id="visu_form_show" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+            <i class="material-icons">visibility</i>
+        </button> 
+    `);
+};
+
+visu_form_show = () => {
+    $('#div_form').show();
+
+    $('#visu_form_show').remove();
 };
 
 status = () => {
     socket.emit('load page', data_client);
-}
+};
 
-/* set_pin = () => {
-    data_client['payload'] = {
+set_pin = () => {
+    /* data_client['payload'] = {
         pin_on_client: [{
             pin: '4',
             state: 0
@@ -142,11 +137,31 @@ status = () => {
             pin: '2',
             state: 1
         }]
-    }
-    console.log(data_client)
-    socket.emit('set pins', data_client);
-} */
+    } */
 
+    console.log(data_client)
+    //socket.emit('set pins', data_client);
+};
+
+hideCard = which => {
+    $(`#${which}_card`).remove();
+
+    $('#nav_drawer').append(`
+        <a id="${which}_card" onclick="showCard('${which}_card');" class="mdl-navigation__link">
+            <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">
+                ${which == 'graph' ? 'timeline': which}
+            </i>
+            ${which}
+        </a>
+    `);
+
+};
+
+showCard = which => {
+    $('#dashboard').append(window[which]);
+
+    $(`a#${which}`).remove();
+};
 
 // initial time for plot chart
 var valor_chart = [
@@ -195,3 +210,14 @@ start_grafic = () => {
         }
     });
 }
+
+/* // send msg for server whit event "msg_on"
+$(() => {
+    $('#chat_form').submit(function () {
+        data_client['payload'] = {
+            msg_on_client: $('#m').val()
+        }
+        socket.emit('msg on', data_client);
+        $('#m').val('');
+    });
+}); */
