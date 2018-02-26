@@ -8,8 +8,25 @@ exports.index = async (application,req,res) => {
 };
 
 exports.thing = async (application,req,res) => {
-	const things = await Things.find({});
-	console.log(things);
-	res.render('thing_proto');
+	getThingAttribute('-L4CFqSZHb3PyVUjs4xf', 'pin_on_thing').then((atributo) =>{
+    console.log(atributo)
+});
+
+	res.render('thing_proto', {pins_avaliable:{pins: [1,2,3,4,5]}});
 	console.log('get things')
 };
+
+var getThingAttribute = async (thing_token,attribute) =>{
+    return  await Things
+                .findOne({
+                    auth: thing_token
+                })
+                .then((thing)=>{
+                    return thing[attribute]
+                })
+                .catch((err)=>{
+                    console.log(err);
+                    return false
+                });  
+};
+

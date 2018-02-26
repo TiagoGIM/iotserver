@@ -1,11 +1,14 @@
-const nome_coisa = window.location.hash.replace('#', ''),
-    socket = io('/tiago_1234'),
-    room = nome_coisa;
+const key_thing = window.location.hash.replace('#', ''),
+socket = io('/tiago_1234');
+
+
+// $.get('/pins_avaliable')
+//     .then(data => console.log(data)); 
 
 let keyboard_buttons = [],
     data_client = {
         auth_user: 'tiago_1234',
-        auth_thing: nome_coisa,
+        auth_thing: key_thing,
         payload: {
             events: {}
         },
@@ -22,30 +25,27 @@ $(document).ready(function () {
     });
 });
 
+//Entra em sala exclusiva
 socket.on('connect', function () {
-    //console.log('try connect');
-    socket.emit('room', room);
+    socket.emit('room', key_thing);
 });
 
 socket.on('message', function (data) {
     console.log('Incoming message:', data);
 });
 
-socket.on('load page', function (msg) {
-    socket.emit('start thing', ids);
-    console.log('on', msg);
-});
-
+//recebe status de pins direto da coisa.
 socket.on('get pins', function (msg) {
     console.log(msg);
 });
-
+//  exibe msg direto da coisa 
 socket.on('msg on', function (msg) {
     console.log('payload', msg);
     $('#thing_msgs').text("thing msg: " + msg);
 });
 
-criarTeclado = (label, state, pin) => {
+
+$criarTeclado = (label, state, pin) => {
     return (`  
         <button id="${label}" state="${ state }" pin="${ pin }" class="mdl-button mdl-js-button mdl-button--raised">
             ${label}
@@ -83,11 +83,28 @@ addButtonPin = () => {
         state: dataForm.state
     });
 
-    $("#keyboard_buttons").append(criarTeclado(dataForm.label, dataForm.state, dataForm.pin));
+
+$("#button_pin > option[value='"+dataForm.pin+"']").remove();
+   
+    $("#keyboard_buttons").append($criarTeclado(dataForm.label, dataForm.state, dataForm.pin));
 
     $(`#${ dataForm.label }`).click(_ => {
+        //change button state betwen 0 and 1.
+        Object.keys(keyboard_buttons).forEach((key) => {
+            console.log(key, keyboard_buttons[key])
+            if (dataForm.label == keyboard_buttons[key]['name']) {
+                if (keyboard_buttons[key]['state'] == 1) {
+                    keyboard_buttons[key].state = 0;
+                } else {
+                    keyboard_buttons[key].state = 1;
+                }
+            }
+        });
 
-        console.log(`Clicou`);
+        data_client['payload'] = {
+            pin_on_client: keyboard_buttons
+        }
+        socket.emit('set pins', data_client);
 
     });
 
@@ -211,6 +228,8 @@ start_grafic = () => {
     });
 }
 
+
+
 /* // send msg for server whit event "msg_on"
 $(() => {
     $('#chat_form').submit(function () {
@@ -221,3 +240,4 @@ $(() => {
         $('#m').val('');
     });
 }); */
+

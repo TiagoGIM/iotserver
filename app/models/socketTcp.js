@@ -84,9 +84,7 @@ exports.iniciarServidor = (io) => {
                                       };
                     att_thing_db_update(sock.thing_key, update_value);
 
-                    io.of(sock.user_key).emit('message', 'Thing is connectd');
-
-                    io.of(sock.user_key).in(sock.thing_key).emit('message','pin rcv '+pin_rcv);
+                    io.of(sock.user_key).in(sock.thing_key).emit('get pins','pin rcv '+pin_rcv);
 
                     getThingAttribute(sock.thing_key, 'pin_on_client').then((atributo) =>{
                         payload_for_thing['payload']['events'].pin_on = atributo;
@@ -178,6 +176,12 @@ exports.iniciarServidor = (io) => {
             socketio.on('msg on', async (msg) => {
                 let update_value = msg['payload'];
                 att_thing_db_update(msg['auth_thing'], update_value)
+                });
+
+            socketio.on('keyboard update', async(msg)=>{
+                let update_value = msg['payload'];
+                console.log(update_value);
+                // att_thing_db_update(msg['auth_thing'], update_value);
                 });
 
             //desnecessary event
@@ -283,6 +287,6 @@ creatUserAndFirstThing = (user_creat) => {
         //if (err) return handleError(err);
     });
 };
-// getThingAttribute('-L4CFqSZHb3PyVUjs4xf', 'msg_on_client').then((atributo) =>{
+// getThingAttribute('-L4CFqSZHb3PyVUjs4xf', 'pin_on_thing').then((atributo) =>{
 //     console.log(atributo)
 // });

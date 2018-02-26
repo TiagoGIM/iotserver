@@ -19,7 +19,7 @@
 
     <script src="js/ejs.js"></script>
 
-    <script src="js/thing_proto.js"></script>
+    
 
     <title>Thing Dashboard</title>
 </head>
@@ -65,7 +65,7 @@
 
                 <div id="dashboard" class="mdl-grid">
                     <!--card CHAT-->
-                    <div id="chat_card" class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-card mdl-shadow--2dp">
+                    <div id="chat_card" class="mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
                             <h2 class="mdl-card__title-text">Chat</h2>
                         </div>
@@ -105,7 +105,7 @@
                     </div>
 
                     <!--card keyboard-->
-                    <div id="keyboard_card" class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-card mdl-shadow--2dp">
+                    <div id="keyboard_card" class="mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
                             <h2 class="mdl-card__title-text">keyboard</h2>
                         </div>
@@ -140,10 +140,11 @@
                                     <!-- Pins Dropdown -->
                                     <select id="button_pin">
                                         <option value="">Selecione o pino</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
+
+                                        <% Object.keys(pins_avaliable['pins']).forEach((i) => { %>
+                                            <option id = <%=pins_avaliable['pins'][i]%> value= <%=pins_avaliable['pins'][i]%> > <%=pins_avaliable['pins'][i]%>  </option>
+                                          <% }); %>
+
                                     </select>
 
                                     <button onclick="addButtonPin()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
@@ -168,7 +169,7 @@
                     </div>
 
                     <!--card Graph-->
-                    <div id="graph_card" class="mdl-cell mdl-cell--12-col mdl-cell--8-col-phone  mdl-card mdl-shadow--2dp">
+                    <div id="graph_card" class="mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet  mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
                             <h2 class="mdl-card__title-text">grafico</h2>
                         </div>
@@ -223,6 +224,7 @@
     </div>
 
 </body>
+<script src="js/thing_proto.js"></script>
 <script>
     const snackbarContainer = document.querySelector('#snackbar');
 
