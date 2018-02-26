@@ -11,6 +11,8 @@ class iotreta:
         self.s = [] #socket será armazenado aqui
         self.pins = {} #dict de portas que serão setadas
         self.events = {} #payload de eventos 
+        self.msg_rcv = ''
+        self.msg_snd =''
 
     def recv_sock_json(self, length):
         return json.loads(str(self.s.recv(length), 'utf8'))
@@ -31,7 +33,7 @@ class iotreta:
                     }
         self.send_sock_json(self.data)
 
-        print(self.data)
+        #print(self.data)
 
         try:
             self.data_server = self.recv_sock_json(1024)
@@ -60,7 +62,6 @@ class iotreta:
         print("send order connection for iotretas's server") 
 
         self.recived = self.send_data_thing(self.configModeThing , event = 'connect')
-        print(type(self.recived))
         
         try:
             if (self.recived['event']['cmd'] is 'connect') and (self.recived['event']['status']):
@@ -150,8 +151,20 @@ class iotreta:
             #self.pins[str(pin)]['pin'].value()
     def msg_on(self , msg =""):
         self.events.update({'msg_on':msg})
+        self.msg_snd = msg            
         self.rcv = self.send_data_thing({'events':self.events})
-        return(self.rcv)
+        #print("coisa diz >>",msg)
+        if 'msg_on' in self.rcv['payload']['events']:
+            if self.msg_rcv == self.rcv['payload']['events']['msg_on']:
+                pass
+            else:
+                self.msg_rcv = self.rcv['payload']['events']['msg_on']
+                print("server diz >> ",self.msg_rcv)
+                
+                #return(self.rcv)
+        
+
+
     def plot_on(self , msg = 0):
         if type(msg) is int:
             self.events.update({'plot_on':msg})
