@@ -6,14 +6,14 @@ socket = io('/tiago_1234');
 //     .then(data => console.log(data)); 
 
 let keyboard_buttons = [],
-    data_client = {
-        auth_user: 'tiago_1234',
-        auth_thing: key_thing,
-        payload: {
-            events: {}
-        },
-        sender: 'client'
-    };
+data_client = {
+    auth_user: 'tiago_1234',
+    auth_thing: key_thing,
+    payload: {
+        events: {}
+    },
+    sender: 'client'
+};
 
 $(document).ready(function () {
     //   Hide the border by commenting out the variable below
@@ -84,14 +84,14 @@ addButtonPin = () => {
     });
 
 
-$("#button_pin > option[value='"+dataForm.pin+"']").remove();
+    $("#button_pin > option[value='"+ dataForm.pin +"']").remove();
    
     $("#keyboard_buttons").append($criarTeclado(dataForm.label, dataForm.state, dataForm.pin));
 
     $(`#${ dataForm.label }`).click(_ => {
         //change button state betwen 0 and 1.
         Object.keys(keyboard_buttons).forEach((key) => {
-            console.log(key, keyboard_buttons[key])
+            //console.log(key, keyboard_buttons[key])
             if (dataForm.label == keyboard_buttons[key]['name']) {
                 if (keyboard_buttons[key]['state'] == 1) {
                     keyboard_buttons[key].state = 0;

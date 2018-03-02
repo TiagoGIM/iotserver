@@ -20,6 +20,7 @@
     margin-right: 30px;
 }
 
+/* 
 #chat_card {
     width: 530px;
 }
@@ -31,10 +32,16 @@
 #graph_card {
     width: 1080px;
 }
+*/
 
 .flex {
     flex: 1;
     display: inline-flex;
+}
+
+.mdl-card {
+    width: 530px;
+    height: 268px;
 }
 
 select {

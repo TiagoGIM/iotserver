@@ -10,16 +10,12 @@
     <script src="js/jquery.min.js"></script>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-indigo.min.css">
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link rel="stylesheet" href="css/mdl/material.css">
+    <script src="css/mdl/material.js"></script>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
-
-    <script src="js/ejs.js"></script>
-
-    
 
     <title>Thing Dashboard</title>
 </head>
@@ -52,7 +48,7 @@
         <!-- Drawer -->
         <div class="dashboard-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
             <header class="dashboard-drawer-header">
-                <span>hello@example.com</span>
+                <span>richard@gim.com</span>
             </header>
 
             <nav id="nav_drawer" class="dashboard-navigation mdl-navigation mdl-color--blue-grey-800">
@@ -61,158 +57,157 @@
         </div>
 
         <main class="mdl-layout__content mdl-color--grey-100">
-            <div class="mdl-layout mdl-js-layout ">
 
-                <div id="dashboard" class="mdl-grid">
-                    <!--card CHAT-->
-                    <div id="chat_card" class="mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <h2 class="mdl-card__title-text">Chat</h2>
+            <div id="dashboard" class="mdl-grid">
+                <!--card CHAT-->
+                <div id="chat_card" class="card mdl-cell mdl-cell--6-col mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">Chat</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+
+                        <p id="thing_msgs"></p>
+                        <ul id="messages"></ul>
+
+                        <form action="">
+
+                            <div id="div_chat_msg" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input id="m" autocomplete="off" class="mdl-textfield__input" type="text">
+                                <label class="mdl-textfield__label" for="m">Digite a mensagem</label>
+                            </div>
+
+                            <button class="mdl-button mdl-js-button mdl-button--raised">
+                                <i class="material-icons">trending_flat</i>
+                            </button>
+                        </form>
+
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <div id="teclado">
+                            <button onclick="set_pin()" class="mdl-button mdl-js-button mdl-button--raised">
+                                <i class="material-icons">input</i>
+                            </button>
+                            <button onclick="start_thing()" class="mdl-button mdl-js-button mdl-button--raised">
+                                <i class="material-icons">cached</i>
+                            </button>
                         </div>
-                        <div class="mdl-card__supporting-text">
+                    </div>
+                    <div class="mdl-card__menu">
+                        <button onclick="hideCard('chat')" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                            <i class="material-icons">visibility_off</i>
+                        </button>
+                    </div>
+                </div>
 
-                            <p id="thing_msgs"></p>
-                            <ul id="messages"></ul>
+                <!--card keyboard-->
+                <div id="keyboard_card" class="card mdl-cell mdl-cell--6-col mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">keyboard</h2>
+                    </div>
+
+                    <div id="keyboard_support_txt" class="mdl-card__supporting-text">
+
+                        <!-- Keyboard Buttons -->
+                        <div id="keyboard_buttons"></div>
+
+                        <ul id="messages_3"></ul>
+
+                        <div id="div_form" class="flex">
 
                             <form action="">
-
-                                <div id="div_chat_msg" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input id="m" autocomplete="off" class="mdl-textfield__input" type="text">
-                                    <label class="mdl-textfield__label" for="m">Digite a mensagem</label>
+                                <!-- Button Label -->
+                                <div id="div_button_label" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="button_label" autocomplete="off" class="mdl-textfield__input" type="text">
+                                    <label class="mdl-textfield__label" for="button_label">Button label</label>
                                 </div>
 
-                                <button class="mdl-button mdl-js-button mdl-button--raised">
-                                    <i class="material-icons">trending_flat</i>
+                                <!-- Button State -->
+                                <select id="button_state">
+                                    <option value="">State</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                </select>
+
+                                <button onclick="visu_form_hide()" id="visu_form" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                                    <i class="material-icons">visibility_off</i>
+                                </button>
+
+                                <!-- Pins Dropdown -->
+                                <select id="button_pin">
+                                    <option value="">Selecione o pino</option>
+
+                                    <% Object.keys(pins_avaliable['pins']).forEach((i) => { %>
+                                        <option id = <%=pins_avaliable['pins'][i]%> value= <%=pins_avaliable['pins'][i]%> > <%=pins_avaliable['pins'][i]%>  </option>
+                                        <% }); %>
+
+                                </select>
+
+                                <button onclick="addButtonPin()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                                    <i class="material-icons">add</i>
                                 </button>
                             </form>
+                        </div>
 
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border">
-                            <div id="teclado">
-                                <button onclick="set_pin()" class="mdl-button mdl-js-button mdl-button--raised">
-                                    <i class="material-icons">input</i>
-                                </button>
-                                <button onclick="start_thing()" class="mdl-button mdl-js-button mdl-button--raised">
-                                    <i class="material-icons">cached</i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mdl-card__menu">
-                            <button onclick="hideCard('chat')" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                                <i class="material-icons">visibility_off</i>
-                            </button>
-                        </div>
                     </div>
+                    <div class="mdl-card__actions mdl-card--border">
 
-                    <!--card keyboard-->
-                    <div id="keyboard_card" class="mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <h2 class="mdl-card__title-text">keyboard</h2>
-                        </div>
+                        <button onclick="keyboard_save()" class="mdl-button mdl-js-button mdl-button--raised">
+                            <i class="material-icons">save</i>
+                        </button>
 
-                        <div id="keyboard_support_txt" class="mdl-card__supporting-text">
-
-                            <!-- Keyboard Buttons -->
-                            <div id="keyboard_buttons"></div>
-
-                            <ul id="messages_3"></ul>
-
-                            <div id="div_form" class="flex">
-
-                                <form action="">
-                                    <!-- Button Label -->
-                                    <div id="div_button_label" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input id="button_label" autocomplete="off" class="mdl-textfield__input" type="text">
-                                        <label class="mdl-textfield__label" for="button_label">Button label</label>
-                                    </div>
-
-                                    <!-- Button State -->
-                                    <select id="button_state">
-                                        <option value="">State</option>
-                                        <option value="0">0</option>
-                                        <option value="1">1</option>
-                                    </select>
-
-                                    <button onclick="visu_form_hide()" id="visu_form" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                                        <i class="material-icons">visibility_off</i>
-                                    </button>
-
-                                    <!-- Pins Dropdown -->
-                                    <select id="button_pin">
-                                        <option value="">Selecione o pino</option>
-
-                                        <% Object.keys(pins_avaliable['pins']).forEach((i) => { %>
-                                            <option id = <%=pins_avaliable['pins'][i]%> value= <%=pins_avaliable['pins'][i]%> > <%=pins_avaliable['pins'][i]%>  </option>
-                                          <% }); %>
-
-                                    </select>
-
-                                    <button onclick="addButtonPin()" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
-                                        <i class="material-icons">add</i>
-                                    </button>
-                                </form>
-                            </div>
-
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border">
-
-                            <button onclick="keyboard_save()" class="mdl-button mdl-js-button mdl-button--raised">
-                                <i class="material-icons">save</i>
-                            </button>
-
-                        </div>
-                        <div class="mdl-card__menu">
-                            <button onclick="hideCard('keyboard')" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                                <i class="material-icons">visibility_off</i>
-                            </button>
-                        </div>
                     </div>
-
-                    <!--card Graph-->
-                    <div id="graph_card" class="mdl-cell mdl-cell--12-col  mdl-cell--12-col-tablet  mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <h2 class="mdl-card__title-text">grafico</h2>
-                        </div>
-                        <div class="mdl-card__supporting-text">
-                            <form action="">
-                                <div id="chart_graf"></div>
-                            </form>
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border">
-                            <div id="teclado">
-                                <button onclick="start_grafic()" class="mdl-button mdl-js-button mdl-button--raised">
-                                    <i class="material-icons"> cached</i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mdl-card__menu">
-                            <button onclick="hideCard('graph');" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                                <i class="material-icons">visibility_off</i>
-                            </button>
-                        </div>
+                    <div class="mdl-card__menu">
+                        <button onclick="hideCard('keyboard')" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                            <i class="material-icons">visibility_off</i>
+                        </button>
                     </div>
-
                 </div>
-                <!--   
-                    <main class="mdl-layout__content">
-                        <footer class="mdl-mini-footer">
-                            <div class="mdl-mini-footer__left-section">
-                                <div class="mdl-logo">Copyright Information</div>
-                                <ul class=mdl-mini-footer__link-list"">
-                                    <li><a href="#">Help</a></li>
-                                    <li><a href="#">Privacy terms</a></li>
-                                    <li><a href="#">User Agreement</a></li>
-                                </ul>
-                            </div>
-                            <div class="mdl-mini-footer__right-section">
-                                <button class="mdl-mini-footer__social-btn">1</button>
-                                <button class="mdl-mini-footer__social-btn">2</button>
-                                <button class="mdl-mini-footer__social-btn">3</button>
-                            </div>
-                        </footer>
-                    </main>
-                -->
+
+                <!--card Graph-->
+                <div id="graph_card" class="card mdl-cell mdl-cell--6-col  mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">grafico</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <form action="">
+                            <div id="chart_graf"></div>
+                        </form>
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <div id="teclado">
+                            <button onclick="start_grafic()" class="mdl-button mdl-js-button mdl-button--raised">
+                                <i class="material-icons"> cached</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mdl-card__menu">
+                        <button onclick="hideCard('graph');" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                            <i class="material-icons">visibility_off</i>
+                        </button>
+                    </div>
+                </div>
+
             </div>
+            
+            <!--   
+                <main class="mdl-layout__content">
+                    <footer class="mdl-mini-footer">
+                        <div class="mdl-mini-footer__left-section">
+                            <div class="mdl-logo">Copyright Information</div>
+                            <ul class=mdl-mini-footer__link-list"">
+                                <li><a href="#">Help</a></li>
+                                <li><a href="#">Privacy terms</a></li>
+                                <li><a href="#">User Agreement</a></li>
+                            </ul>
+                        </div>
+                        <div class="mdl-mini-footer__right-section">
+                            <button class="mdl-mini-footer__social-btn">1</button>
+                            <button class="mdl-mini-footer__social-btn">2</button>
+                            <button class="mdl-mini-footer__social-btn">3</button>
+                        </div>
+                    </footer>
+                </main>
+            -->            
 
             <!-- Snackbar -->
             <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
