@@ -13,6 +13,7 @@ io.on('connection', (client) => {
   client.on('get_pins', pins => {
     let a_pins = [1, 2, 3, 4, 5];
     console.log(`Available pins: ${a_pins}`);
+    client.emit('get_pins',a_pins);
   });
 
   client.on('save_keyboard', keyboard => {
