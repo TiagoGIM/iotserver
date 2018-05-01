@@ -1,36 +1,41 @@
-import { AUTH_LOGIN, AUTH_LOGOUT } from 'admin-on-rest';
+import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_CHECK } from 'admin-on-rest';
+import { firebase } from './firebase'
 
 export default (type, params) => {
-
     if (type === AUTH_LOGIN) {
-        /*
-        const { username, password } = params;
         
-        const request = new Request('https://mydomain.com/authenticate', {
-            method: 'POST',
-            body: JSON.stringify({ username, password }),
-            headers: new Headers({ 'Content-Type': 'application/json' }),
+        const { username, password } = params;
+
+       return firebase.auth().signInWithEmailAndPassword(username, password)
+            .then(user => {
+                localStorage.setItem('UID', user.uid);
+                Promise.resolve();
+            })
+            .catch(error => {
+                const { message } = error;
+                Promise.reject(message);
+            });
+    }
+
+   if (type === AUTH_LOGOUT) {
+
+        localStorage.removeItem('UID');
+
+        firebase.auth().signOut().then(function() {
+            // Sign-out successful.
+        }).catch(function(error) {
+            // An error happened.
+           console.log(error);
         });
 
-        return fetch(request)
-            .then(response => {
-                if (response.status < 200 || response.status >= 300) {
-                    throw new Error(response.statusText);
-                }
-                return response.json();
-            })
-            .then(({ token }) => {
-                localStorage.setItem('token', token);
-            }); 
-        */
-    }
-
-    if (type === AUTH_LOGOUT) {
-
-        localStorage.removeItem('token');
-        return Promise.resolve();
+        return Promise.resolve(); 
 
     }
+     
+    if (type === AUTH_CHECK) {
+        return localStorage.getItem('UID') ? Promise.resolve() : Promise.reject();
+    } 
 
-    return Promise.resolve();
+    //return Promise.reject();
 }
+

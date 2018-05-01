@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
 import { Button, IconButton, Typography, Grid } from 'material-ui';
 
-import { VisibilityOff } from 'material-ui-icons';
+import { VisibilityOff } from '@material-ui/icons';
 
 export default class GraphCard extends Component {
     state = {
-        show: this.props.view
+        show: this.props.show
     };
 
     handleHide = card => {

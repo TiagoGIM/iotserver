@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
 import { Button, IconButton, Switch, FormControlLabel, FormControl, FormGroup, InputLabel, Select, Input, Dialog, DialogTitle, DialogContent, MenuItem, DialogActions, Grid } from 'material-ui';
 
-import { VisibilityOff } from 'material-ui-icons';
+import { VisibilityOff } from '@material-ui/icons';
 
 import { saveKeyboard } from '../../api';
 
@@ -304,7 +304,7 @@ export default class KeyboardCard extends Component {
         super(props);
 
         this.state = {
-            show: this.props.view,
+            show: this.props.show,
             btns: []
         }
     }
@@ -338,7 +338,7 @@ export default class KeyboardCard extends Component {
         this.props.callback(card);
     };
 
-    handleSave = (btns) => {
+    handleSave = btns => {
         saveKeyboard(btns);
     };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Button } from 'material-ui';
 
-import MenuIcon from 'material-ui-icons/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
 
 export default props => 
     <AppBar position="static">

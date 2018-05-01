@@ -5,7 +5,7 @@ import { Button, IconButton, TextField, Grid, Typography } from 'material-ui';
 
 import { ChatFeed, Message } from 'react-chat-ui';
 
-import { VisibilityOff, Send, ExpandMore } from 'material-ui-icons';
+import { VisibilityOff, Send, ExpandMore } from '@material-ui/icons';
 
 import { sendMsg } from '../../api'
 
@@ -14,7 +14,7 @@ export default class ChatCard extends Component {
         super(props);
 
         this.state = {
-            show: this.props.view,
+            show: this.props.show,
             msg: '',
             log: [
                 new Message({ id: 1, message: "Thing messages", senderName: 'Thing' }), 

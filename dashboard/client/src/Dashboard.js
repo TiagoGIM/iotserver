@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Button, Menu, MenuItem, Grid } from 'material-ui';
-import AddIcon from 'material-ui-icons/Add';
+import AddIcon from '@material-ui/icons/Add';
 import { KeyboardCard, ChatCard, GraphCard } from './components/cards';
 
 import { open_room, getPins } from './api'
@@ -60,14 +60,13 @@ export default class Dashboard extends Component {
         this.state = {
             chat: true,
             keyboard: true, 
-            graph: false
+            graph: true
         };
     }
 
     hideCallback = card => {
         let update = this.state;
         update[card] = !update[card];
-        
         this.setState({ ...update });
     }
 
